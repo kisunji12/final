@@ -33,27 +33,22 @@ while count <= 3:
 
                 res = requests.get(url+str(pageno))
 
-                if pageno > page_data:
-                    # SEEK HELPS TO BRING THE POINTER TO FIRST.
-                    fp.seek(0)
-                    fp.write(str(pageno))
+                # SEEK HELPS TO BRING THE POINTER TO FIRST.
+                fp.seek(0)
+                fp.write(str(pageno))
 
-                    # WRITE THE JSON FILE IN ORDER TO SAVE THE REQUIRED DATA.
-                    with open('jsondata.json', 'a+', encoding='utf-8') as fp:
-                        for jd in res.json()['data']['items']:
-                            entry_dict = {
-                                'title': jd['title'],
-                                'author': jd['author'],
-                                'content': jd['content'],
-                                'publishDate': jd['publishOn']
-                            }
-                            scraped.append(entry_dict)
-                        json.dump(scraped, fp, ensure_ascii=False, indent=4)
-                        print('Done!!!')
-
-            #    IF PAGE NO IS NOT GREATER THAN PAGE NO SAVED IN PAGE.TXT THEN THIS BLOCK OF CODE EXECUTED.
-                else:
-                    print("Checking Condition...")
+                # WRITE THE JSON FILE IN ORDER TO SAVE THE REQUIRED DATA.
+                with open('jsondata.json', 'a+', encoding='utf-8') as fp:
+                    for jd in res.json()['data']['items']:
+                        entry_dict = {
+                            'title': jd['title'],
+                            'author': jd['author'],
+                            'content': jd['content'],
+                            'publishDate': jd['publishOn']
+                        }
+                        scraped.append(entry_dict)
+                    json.dump(scraped, fp, ensure_ascii=False, indent=4)
+                    print('Done!!!')
 
     except requests.ConnectionError:
         print("Connection Lost..")
