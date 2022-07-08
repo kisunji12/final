@@ -8,7 +8,6 @@ url = 'https://bg.annapurnapost.com/api/search?title=%E0%A4%96%E0%A5%87%E0%A4%B2
 # IF PAGE.TXT NOT EXIST THEN ENTER 0.
 
 pageno = 0
-scraped = []
 
 #  PUT THE NUMBER AS YOUR REQUIREMENT FOR SCRAPING TO CHECK THE CONDITION
 # HOW MANY PAGE YOU WANT TO SCRAPE, FOR NOW IT'S 4.
@@ -19,9 +18,12 @@ while count <= 3:
 
     # CHECK WHETHER THE FILE EXIST OR NOT. IF NOT CREATE ONE.
     try:
-        if not os.path.exists('page.txt'):
+        if not os.path.exists('page.txt' and 'jsondata.json'):
             with open('page.txt', 'w') as fp:
                 fp.write(str(pageno))
+
+            with open('jsondata.json', 'w+') as fp:
+                fp.write('[]')
 
         # <------------------------------------------------------>
 
@@ -38,7 +40,11 @@ while count <= 3:
                 fp.write(str(pageno))
 
                 # WRITE THE JSON FILE IN ORDER TO SAVE THE REQUIRED DATA.
-                with open('jsondata.json', 'a+', encoding='utf-8') as fp:
+                with open('jsondata.json', 'r+', encoding='utf-8') as fp:
+
+                    datalist = json.loads(fp.read())
+                    fp.seek(0)
+
                     for jd in res.json()['data']['items']:
                         entry_dict = {
                             'title': jd['title'],
@@ -46,11 +52,16 @@ while count <= 3:
                             'content': jd['content'],
                             'publishDate': jd['publishOn']
                         }
-                        scraped.append(entry_dict)
-                    json.dump(scraped, fp, ensure_ascii=False, indent=4)
+                        datalist.append(entry_dict)
+
+                    json.dump(datalist, fp, ensure_ascii=False, indent=4)
                     print('Done!!!')
 
     except requests.ConnectionError:
         print("Connection Lost..")
 
     count += 1
+
+# Read all the scraped data title outside while loop separately
+for data in datalist:
+    print(data['title'])
