@@ -2,7 +2,7 @@ import json
 import requests
 import os.path
 
-url = 'https://bg.annapurnapost.com/api/search?title=%E0%A4%96%E0%A5%87%E0%A4%B2%E0%A4%95%E0%A5%81%E0%A4%A6&page='
+url = 'https://bg.annapurnapost.com/api/search?title=%E0%A4%96%E0%A5%87%E0%A4%B2%E0%A4%95%E0%A5%81%E0%A4%A6'
 
 # MANUALLY ENTER THE NUMBER MORE THAN NUMBER SAVED IN PAGE.TXT FILE.
 # IF PAGE.TXT NOT EXIST THEN ENTER 0.
@@ -33,7 +33,7 @@ while count <= 3:
 
                 pageno = (1+page_data)
 
-                res = requests.get(url+str(pageno))
+                res = requests.get(url)
 
                 # SEEK HELPS TO BRING THE POINTER TO FIRST.
                 fp.seek(0)
